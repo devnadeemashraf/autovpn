@@ -1,0 +1,133 @@
+{% extends "base.html" %} {% block title %}AutoVPN - Admin Panel{% endblock %}
+{% block content %}
+<div class="space-y-8">
+  <h1 class="text-3xl font-bold text-gray-900">Admin Panel</h1>
+
+  <!-- App Passwords Section -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">App Passwords</h2>
+    <div
+      hx-get="/api/admin/passwords"
+      hx-trigger="load"
+      hx-target="#passwords-list"
+    ></div>
+    <div id="passwords-list"></div>
+    <button
+      hx-get="/api/admin/passwords"
+      hx-target="#passwords-list"
+      class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+    >
+      Refresh List
+    </button>
+
+    <form
+      hx-post="/api/admin/passwords"
+      hx-target="#passwords-list"
+      class="mt-4 space-y-4"
+    >
+      <div class="grid grid-cols-2 gap-4">
+        <input
+          type="text"
+          name="name"
+          placeholder="Password name"
+          class="px-3 py-2 border border-gray-300 rounded-md"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          class="px-3 py-2 border border-gray-300 rounded-md"
+          required
+        />
+      </div>
+      <button
+        type="submit"
+        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
+        Add Password
+      </button>
+    </form>
+  </div>
+
+  <!-- Automations Section -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Automations</h2>
+    <div
+      hx-get="/api/admin/automations"
+      hx-trigger="load"
+      hx-target="#automations-list"
+    ></div>
+    <div id="automations-list"></div>
+    <button
+      hx-get="/api/admin/automations"
+      hx-target="#automations-list"
+      class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+    >
+      Refresh List
+    </button>
+  </div>
+
+  <!-- User Logins Section -->
+  <div class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">User Logins</h2>
+    <div
+      hx-get="/api/admin/user-logins"
+      hx-trigger="load"
+      hx-target="#logins-list"
+    ></div>
+    <div id="logins-list"></div>
+    <button
+      hx-get="/api/admin/user-logins"
+      hx-target="#logins-list"
+      class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+    >
+      Refresh List
+    </button>
+
+    <form
+      hx-post="/api/admin/user-logins"
+      hx-target="#logins-list"
+      class="mt-4 space-y-4"
+    >
+      <div class="grid grid-cols-2 gap-4">
+        <input
+          type="number"
+          name="automation_id"
+          placeholder="Automation ID"
+          class="px-3 py-2 border border-gray-300 rounded-md"
+          required
+        />
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          class="px-3 py-2 border border-gray-300 rounded-md"
+          required
+        />
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          class="px-3 py-2 border border-gray-300 rounded-md"
+          required
+        />
+        <input
+          type="text"
+          name="display_name"
+          placeholder="Display Name"
+          class="px-3 py-2 border border-gray-300 rounded-md"
+        />
+      </div>
+      <button
+        type="submit"
+        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+      >
+        Add Login
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

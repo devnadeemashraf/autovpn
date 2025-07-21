@@ -1,0 +1,112 @@
+{% extends "base.html" %} {% block title %}AutoVPN - Home{% endblock %} {% block
+content %}
+<div class="text-center py-12">
+  <h1 class="text-4xl font-bold text-gray-900 mb-4">Welcome to AutoVPN</h1>
+  <p class="text-xl text-gray-600 mb-8">
+    Automated VPN profile creation from websites
+  </p>
+
+  <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">Admin Panel</h2>
+      <p class="text-gray-600 mb-4">
+        Manage automations, user logins, and app passwords.
+      </p>
+      <a
+        href="/admin"
+        class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+      >
+        Go to Admin
+      </a>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">User Panel</h2>
+      <p class="text-gray-600 mb-4">
+        Generate VPN profiles using available automations.
+      </p>
+      <a
+        href="/user"
+        class="inline-block bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700"
+      >
+        Generate Profiles
+      </a>
+    </div>
+  </div>
+
+  <div class="mt-12">
+    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Features</h3>
+    <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+      <div class="text-center">
+        <div
+          class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+        >
+          <svg
+            class="w-8 h-8 text-blue-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 10V3L4 14h7v7l9-11h-7z"
+            ></path>
+          </svg>
+        </div>
+        <h4 class="font-semibold text-gray-800">Web Automation</h4>
+        <p class="text-gray-600">
+          Automated browser interactions for VPN generation
+        </p>
+      </div>
+
+      <div class="text-center">
+        <div
+          class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+        >
+          <svg
+            class="w-8 h-8 text-green-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+        </div>
+        <h4 class="font-semibold text-gray-800">Configurable</h4>
+        <p class="text-gray-600">Easy configuration for new websites</p>
+      </div>
+
+      <div class="text-center">
+        <div
+          class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+        >
+          <svg
+            class="w-8 h-8 text-purple-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            ></path>
+          </svg>
+        </div>
+        <h4 class="font-semibold text-gray-800">Secure</h4>
+        <p class="text-gray-600">
+          Password-protected access and encrypted storage
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

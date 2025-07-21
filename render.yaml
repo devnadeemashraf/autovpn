@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: autovpn
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m autovpn.main
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.0
