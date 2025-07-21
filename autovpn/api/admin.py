@@ -10,7 +10,8 @@ from autovpn.models.automation import Automation, AutomationStep
 from autovpn.models.user_login import UserLogin
 from autovpn.models.app_password import AppPassword
 from autovpn.models.generation_request import GenerationRequest
-from autovpn.core.security import hash_password
+from autovpn.core.security import hash_password, verify_password
+from autovpn.core.config import settings
 
 router = APIRouter()
 

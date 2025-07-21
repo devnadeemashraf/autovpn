@@ -31,7 +31,7 @@ def show_help():
 
 
 def setup_admin():
-    """Setup admin master password via CLI."""
+    """Setup admin master password via CLI or environment variable."""
     print("=" * 50)
     print("AutoVPN Admin Setup")
     print("=" * 50)
@@ -45,18 +45,24 @@ def setup_admin():
             print("Admin is already setup!")
             return
 
-    # Get admin password
-    while True:
-        password = getpass.getpass("Enter admin master password: ")
-        confirm_password = getpass.getpass("Confirm admin master password: ")
+    # Check for environment variable first
+    env_password = settings.admin_master_password
+    if env_password:
+        print("Using admin password from environment variable...")
+        password = env_password
+    else:
+        # Get admin password interactively
+        while True:
+            password = getpass.getpass("Enter admin master password: ")
+            confirm_password = getpass.getpass("Confirm admin master password: ")
 
-        if password == confirm_password:
-            if len(password) < 6:
-                print("Password must be at least 6 characters long.")
-                continue
-            break
-        else:
-            print("Passwords do not match. Please try again.")
+            if password == confirm_password:
+                if len(password) < 6:
+                    print("Password must be at least 6 characters long.")
+                    continue
+                break
+            else:
+                print("Passwords do not match. Please try again.")
 
     # Create admin password
     with Session(engine) as session:

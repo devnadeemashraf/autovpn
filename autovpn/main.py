@@ -20,6 +20,33 @@ async def lifespan(app: FastAPI):
     # Startup
     await create_tables()
     ensure_directories()  # Ensure required directories exist
+
+    # Check if admin is setup
+    from autovpn.core.database import engine
+    from autovpn.models.app_password import AppPassword
+    from sqlmodel import Session, select
+
+    with Session(engine) as session:
+        statement = select(AppPassword).where(AppPassword.name == "admin_master")
+        admin_exists = session.exec(statement).first()
+
+        if not admin_exists and settings.admin_master_password:
+            # Auto-setup admin from environment variable
+            from autovpn.core.security import hash_password
+
+            admin_password = AppPassword(
+                name="admin_master",
+                password_hash=hash_password(settings.admin_master_password),
+                is_active=True,
+            )
+            session.add(admin_password)
+            session.commit()
+            print("✅ Admin setup completed from environment variable")
+        elif not admin_exists:
+            print(
+                "⚠️ Admin not setup. Set ADMIN_MASTER_PASSWORD environment variable to configure"
+            )
+
     yield
     # Shutdown
     pass
@@ -61,6 +88,24 @@ app.include_router(web_router)
 async def health_check():
     """Health check endpoint for Render monitoring."""
     return {"status": "healthy", "service": "autovpn"}
+
+
+@app.get("/setup-status")
+async def setup_status():
+    """Check if admin is setup."""
+    from autovpn.core.database import engine
+    from autovpn.models.app_password import AppPassword
+    from sqlmodel import Session, select
+
+    with Session(engine) as session:
+        statement = select(AppPassword).where(AppPassword.name == "admin_master")
+        admin_exists = session.exec(statement).first()
+
+        return {
+            "admin_setup": admin_exists is not None,
+            "setup_method": "environment_variable",
+            "instructions": "Set ADMIN_MASTER_PASSWORD environment variable to configure admin",
+        }
 
 
 if __name__ == "__main__":
