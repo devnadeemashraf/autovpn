@@ -26,11 +26,12 @@ class Settings(BaseSettings):
     download_dir: str = "./downloads"
 
     # Puppeteer settings
-    puppeteer_headless: bool = False  # Set to False for development to see browser
+    puppeteer_headless: bool = True  # Set to True for production
     puppeteer_timeout: int = 30000
 
     class Config:
         env_file = ".env"
+        case_sensitive = False
 
 
 settings = Settings()

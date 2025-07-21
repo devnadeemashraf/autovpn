@@ -57,6 +57,12 @@ app.include_router(api_router, prefix="/api")
 app.include_router(web_router)
 
 
+@app.get("/health")
+async def health_check():
+    """Health check endpoint for Render monitoring."""
+    return {"status": "healthy", "service": "autovpn"}
+
+
 if __name__ == "__main__":
     import uvicorn
 
