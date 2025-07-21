@@ -33,29 +33,12 @@ class AutomationEngine:
         print("🚀 Launching Puppeteer browser...")
 
         try:
-            # Different args for headless vs visible mode
-            if headless:
-                args = [
-                    "--no-sandbox",
-                    "--disable-setuid-sandbox",
-                    "--disable-dev-shm-usage",
-                    "--disable-gpu",
-                    "--disable-web-security",
-                    "--disable-features=VizDisplayCompositor",
-                    "--window-size=1920,1080",
-                    "--remote-debugging-port=9222",
-                ]
-            else:
-                args = [
-                    "--no-sandbox",
-                    "--disable-setuid-sandbox",
-                    "--disable-dev-shm-usage",
-                    "--disable-gpu",
-                    "--disable-web-security",
-                    "--window-size=1920,1080",
-                    "--start-maximized",
-                    "--disable-blink-features=AutomationControlled",
-                ]
+            # Minimal, stable browser arguments
+            args = [
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+            ]
 
             self.browser = await launch(
                 {

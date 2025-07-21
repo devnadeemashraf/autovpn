@@ -9,7 +9,7 @@ from fastapi import HTTPException, Request
 class RateLimiter:
     """Simple in-memory rate limiter based on IP address."""
 
-    def __init__(self, requests_per_minute: int = 5):
+    def __init__(self, requests_per_minute: int = 25):
         self.requests_per_minute = requests_per_minute
         self.requests: Dict[str, List[float]] = defaultdict(list)
 
@@ -42,7 +42,7 @@ class RateLimiter:
 
 
 # Global rate limiter instance
-rate_limiter = RateLimiter(requests_per_minute=5)
+rate_limiter = RateLimiter(requests_per_minute=25)
 
 
 def get_client_ip(request: Request) -> str:

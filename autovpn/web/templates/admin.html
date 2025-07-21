@@ -1,133 +1,436 @@
-{% extends "base.html" %} {% block title %}AutoVPN - Admin Panel{% endblock %}
+{% extends "base.html" %} {% block title %}Admin Panel - AutoVPN{% endblock %}
 {% block content %}
-<div class="space-y-8">
-  <h1 class="text-3xl font-bold text-gray-900">Admin Panel</h1>
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Admin Panel</h1>
 
-  <!-- App Passwords Section -->
-  <div class="bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">App Passwords</h2>
-    <div
-      hx-get="/api/admin/passwords"
-      hx-trigger="load"
-      hx-target="#passwords-list"
-    ></div>
-    <div id="passwords-list"></div>
-    <button
-      hx-get="/api/admin/passwords"
-      hx-target="#passwords-list"
-      class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-    >
-      Refresh List
-    </button>
-
-    <form
-      hx-post="/api/admin/passwords"
-      hx-target="#passwords-list"
-      class="mt-4 space-y-4"
-    >
-      <div class="grid grid-cols-2 gap-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Password name"
-          class="px-3 py-2 border border-gray-300 rounded-md"
-          required
-        />
+    <!-- Admin Authentication -->
+    <div id="authSection" class="bg-white shadow-lg rounded-lg p-6 mb-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">
+        Admin Authentication
+      </h2>
+      <div class="space-y-4">
         <input
           type="password"
-          name="password"
-          placeholder="Password"
-          class="px-3 py-2 border border-gray-300 rounded-md"
-          required
+          id="adminPassword"
+          placeholder="Enter admin master password"
+          class="w-full p-3 border border-gray-300 rounded-lg"
         />
+        <button
+          id="authBtn"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Authenticate
+        </button>
       </div>
-      <button
-        type="submit"
-        class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        Add Password
-      </button>
-    </form>
-  </div>
+    </div>
 
-  <!-- Automations Section -->
-  <div class="bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">Automations</h2>
-    <div
-      hx-get="/api/admin/automations"
-      hx-trigger="load"
-      hx-target="#automations-list"
-    ></div>
-    <div id="automations-list"></div>
-    <button
-      hx-get="/api/admin/automations"
-      hx-target="#automations-list"
-      class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-    >
-      Refresh List
-    </button>
-  </div>
-
-  <!-- User Logins Section -->
-  <div class="bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">User Logins</h2>
-    <div
-      hx-get="/api/admin/user-logins"
-      hx-trigger="load"
-      hx-target="#logins-list"
-    ></div>
-    <div id="logins-list"></div>
-    <button
-      hx-get="/api/admin/user-logins"
-      hx-target="#logins-list"
-      class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-    >
-      Refresh List
-    </button>
-
-    <form
-      hx-post="/api/admin/user-logins"
-      hx-target="#logins-list"
-      class="mt-4 space-y-4"
-    >
-      <div class="grid grid-cols-2 gap-4">
-        <input
-          type="number"
-          name="automation_id"
-          placeholder="Automation ID"
-          class="px-3 py-2 border border-gray-300 rounded-md"
-          required
-        />
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          class="px-3 py-2 border border-gray-300 rounded-md"
-          required
-        />
+    <!-- Admin Content (hidden until authenticated) -->
+    <div id="adminContent" class="hidden">
+      <!-- App Password Management -->
+      <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+          App Password Management
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <input
+              type="text"
+              id="passwordName"
+              placeholder="Password name"
+              class="w-full p-3 border border-gray-300 rounded-lg mb-2"
+            />
+            <input
+              type="password"
+              id="passwordValue"
+              placeholder="Password value"
+              class="w-full p-3 border border-gray-300 rounded-lg mb-2"
+            />
+            <button
+              id="createPasswordBtn"
+              class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Create Password
+            </button>
+          </div>
+          <div id="passwordsList"></div>
+        </div>
       </div>
-      <div class="grid grid-cols-2 gap-4">
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          class="px-3 py-2 border border-gray-300 rounded-md"
-          required
-        />
-        <input
-          type="text"
-          name="display_name"
-          placeholder="Display Name"
-          class="px-3 py-2 border border-gray-300 rounded-md"
-        />
+
+      <!-- Automation Management -->
+      <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+          Automation Management
+        </h2>
+        <div class="space-y-4">
+          <div id="automationsList"></div>
+        </div>
       </div>
-      <button
-        type="submit"
-        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-      >
-        Add Login
-      </button>
-    </form>
+
+      <!-- Automation Import -->
+      <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+          Import Automations
+        </h2>
+        <div class="space-y-4">
+          <div id="importScriptsList"></div>
+        </div>
+      </div>
+
+      <!-- User Login Management -->
+      <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">
+          User Login Management
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <input
+              type="number"
+              id="loginAutomation"
+              placeholder="Automation ID"
+              class="w-full p-3 border border-gray-300 rounded-lg mb-2"
+            />
+            <input
+              type="text"
+              id="loginUsername"
+              placeholder="Username"
+              class="w-full p-3 border border-gray-300 rounded-lg mb-2"
+            />
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Password"
+              class="w-full p-3 border border-gray-300 rounded-lg mb-2"
+            />
+            <input
+              type="text"
+              id="loginDisplayName"
+              placeholder="Display Name"
+              class="w-full p-3 border border-gray-300 rounded-lg mb-2"
+            />
+            <button
+              id="createLoginBtn"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Create Login
+            </button>
+          </div>
+          <div id="loginsList"></div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+
+<script>
+  let adminToken = null;
+
+  // Admin Authentication
+  document
+    .getElementById("authBtn")
+    .addEventListener("click", async function () {
+      const password = document.getElementById("adminPassword").value;
+
+      try {
+        const response = await fetch("/api/admin/auth", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `password=${encodeURIComponent(password)}`,
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          adminToken = data.access_token;
+          document.getElementById("authSection").classList.add("hidden");
+          document.getElementById("adminContent").classList.remove("hidden");
+          loadAdminData();
+        } else {
+          alert("Authentication failed: " + data.detail);
+        }
+      } catch (error) {
+        alert("Authentication failed: " + error.message);
+      }
+    });
+
+  async function loadAdminData() {
+    await Promise.all([
+      loadPasswords(),
+      loadAutomations(),
+      loadImportScripts(),
+      loadLogins(),
+    ]);
+  }
+
+  // App Password Management
+  async function loadPasswords() {
+    try {
+      const response = await fetch("/api/admin/passwords", {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const html = await response.text();
+        document.getElementById("passwordsList").innerHTML = html;
+      }
+    } catch (error) {
+      console.error("Error loading passwords:", error);
+    }
+  }
+
+  document
+    .getElementById("createPasswordBtn")
+    .addEventListener("click", async function () {
+      const name = document.getElementById("passwordName").value;
+      const password = document.getElementById("passwordValue").value;
+
+      try {
+        const response = await fetch("/api/admin/passwords", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `name=${encodeURIComponent(name)}&password=${encodeURIComponent(
+            password
+          )}`,
+        });
+
+        if (response.ok) {
+          const html = await response.text();
+          document
+            .getElementById("passwordsList")
+            .insertAdjacentHTML("beforebegin", html);
+          document.getElementById("passwordName").value = "";
+          document.getElementById("passwordValue").value = "";
+          loadPasswords();
+        } else {
+          const data = await response.json();
+          alert("Failed to create password: " + data.detail);
+        }
+      } catch (error) {
+        alert("Error creating password: " + error.message);
+      }
+    });
+
+  async function deletePassword(id) {
+    if (!confirm("Are you sure you want to delete this password?")) return;
+
+    try {
+      const response = await fetch(`/api/admin/passwords/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
+
+      if (response.ok) {
+        loadPasswords();
+      } else {
+        const data = await response.json();
+        alert("Failed to delete password: " + data.detail);
+      }
+    } catch (error) {
+      alert("Error deleting password: " + error.message);
+    }
+  }
+
+  // Automation Management
+  async function loadAutomations() {
+    try {
+      const response = await fetch("/api/admin/automations", {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const html = await response.text();
+        document.getElementById("automationsList").innerHTML = html;
+      }
+    } catch (error) {
+      console.error("Error loading automations:", error);
+    }
+  }
+
+  async function deleteAutomation(id) {
+    if (!confirm("Are you sure you want to delete this automation?")) return;
+
+    try {
+      const response = await fetch(`/api/admin/automations/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
+
+      if (response.ok) {
+        loadAutomations();
+        loadLogins(); // Refresh login dropdown
+      } else {
+        const data = await response.json();
+        alert("Failed to delete automation: " + data.detail);
+      }
+    } catch (error) {
+      alert("Error deleting automation: " + error.message);
+    }
+  }
+
+  // Import Scripts Management
+  async function loadImportScripts() {
+    try {
+      const response = await fetch("/api/admin/import-scripts", {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const scripts = await response.json();
+        const importScriptsList = document.getElementById("importScriptsList");
+        importScriptsList.innerHTML = scripts
+          .map(
+            (script) => `
+                <div class="border p-3 rounded mb-2">
+                    <strong>${script.name}</strong> - ${
+              script.description || "No description"
+            }
+                    <br>Status: ${
+                      script.imported
+                        ? "Already Imported"
+                        : "Available for Import"
+                    }
+                    ${
+                      !script.imported
+                        ? `<button onclick="importAutomation('${script.filename}')" class="ml-2 bg-green-500 text-white px-2 py-1 rounded text-sm">Import</button>`
+                        : ""
+                    }
+                </div>
+            `
+          )
+          .join("");
+      }
+    } catch (error) {
+      console.error("Error loading import scripts:", error);
+    }
+  }
+
+  async function importAutomation(filename) {
+    if (!confirm("Are you sure you want to import this automation?")) return;
+
+    try {
+      const response = await fetch("/api/admin/import-automation", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `filename=${encodeURIComponent(filename)}`,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert(`Automation imported successfully! ID: ${data.automation_id}`);
+        loadImportScripts();
+        loadAutomations();
+        loadLogins(); // Refresh login dropdown
+      } else {
+        const data = await response.json();
+        alert("Failed to import automation: " + data.detail);
+      }
+    } catch (error) {
+      alert("Error importing automation: " + error.message);
+    }
+  }
+
+  // User Login Management
+  async function loadLogins() {
+    try {
+      const response = await fetch("/api/admin/logins", {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
+
+      if (response.ok) {
+        const html = await response.text();
+        document.getElementById("loginsList").innerHTML = html;
+      }
+    } catch (error) {
+      console.error("Error loading logins:", error);
+    }
+  }
+
+  document
+    .getElementById("createLoginBtn")
+    .addEventListener("click", async function () {
+      const automationId = document.getElementById("loginAutomation").value;
+      const username = document.getElementById("loginUsername").value;
+      const password = document.getElementById("loginPassword").value;
+      const displayName = document.getElementById("loginDisplayName").value;
+
+      if (!automationId) {
+        alert("Please enter an automation ID");
+        return;
+      }
+
+      try {
+        const response = await fetch("/api/admin/logins", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: `automation_id=${automationId}&username=${encodeURIComponent(
+            username
+          )}&password=${encodeURIComponent(
+            password
+          )}&display_name=${encodeURIComponent(displayName)}`,
+        });
+
+        if (response.ok) {
+          const html = await response.text();
+          document
+            .getElementById("loginsList")
+            .insertAdjacentHTML("beforebegin", html);
+          document.getElementById("loginAutomation").value = "";
+          document.getElementById("loginUsername").value = "";
+          document.getElementById("loginPassword").value = "";
+          document.getElementById("loginDisplayName").value = "";
+          loadLogins();
+        } else {
+          const data = await response.json();
+          alert("Failed to create login: " + data.detail);
+        }
+      } catch (error) {
+        alert("Error creating login: " + error.message);
+      }
+    });
+
+  async function deleteLogin(id) {
+    if (!confirm("Are you sure you want to delete this login?")) return;
+
+    try {
+      const response = await fetch(`/api/admin/logins/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
+
+      if (response.ok) {
+        loadLogins();
+      } else {
+        const data = await response.json();
+        alert("Failed to delete login: " + data.detail);
+      }
+    } catch (error) {
+      alert("Error deleting login: " + error.message);
+    }
+  }
+</script>
 {% endblock %}

@@ -25,9 +25,10 @@ class Settings(BaseSettings):
     upload_dir: str = "./uploads"
     download_dir: str = "./downloads"
     static_dir: str = "./autovpn/web/static"
+    automations_dir: str = "./automations"
 
     # Puppeteer settings
-    puppeteer_headless: bool = True  # Set to True for production
+    puppeteer_headless: bool = False  # Set to True for production
     puppeteer_timeout: int = 30000
 
     class Config:
@@ -44,3 +45,4 @@ def ensure_directories():
     Path(settings.upload_dir).mkdir(exist_ok=True)
     Path(settings.download_dir).mkdir(exist_ok=True)
     Path(settings.static_dir).mkdir(exist_ok=True)
+    Path(settings.automations_dir).mkdir(exist_ok=True)
