@@ -24,6 +24,7 @@ class Settings(BaseSettings):
     # File storage
     upload_dir: str = "./uploads"
     download_dir: str = "./downloads"
+    static_dir: str = "./autovpn/web/static"
 
     # Puppeteer settings
     puppeteer_headless: bool = True  # Set to True for production
@@ -42,3 +43,4 @@ def ensure_directories():
     """Ensure required directories exist."""
     Path(settings.upload_dir).mkdir(exist_ok=True)
     Path(settings.download_dir).mkdir(exist_ok=True)
+    Path(settings.static_dir).mkdir(exist_ok=True)
